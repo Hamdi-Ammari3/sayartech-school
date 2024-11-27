@@ -566,7 +566,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
   }
   .private_car_request_header > h4 {
     margin: 0;
@@ -579,16 +578,16 @@
     justify-content: space-evenly;
 }
 .private_car_request_form_date{
-    height: 25vh;
+    height: 30vh;
     width:70vw;
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: column;
     align-items: center;
     justify-content: space-around;
 }
-.private_car_request_form_date > div {
+.private_car_request_form_date_day {
     height: 10vh;
-    width:20vw;
+    width:50vw;
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
@@ -610,14 +609,14 @@
     outline: none;
  }
 .private_car_request_form_car{
-    height: 25vh;
+    height: 15vh;
     width:70vw;
     display: flex;
     align-items: center;
     justify-content: space-around;
 }
 .private_car_request_form_car_carNumber{
-    width: 20vw;
+    width: 15vw;
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;
@@ -630,7 +629,7 @@
     margin: 0px;
 }
 .private_car_request_form_car_carNumber > input {
-   width: 80px;
+   width: 60px;
    padding: 10px 0;
    border:none;
    text-align: center;
@@ -773,11 +772,11 @@
         height: 20vh;
         width:98vw;
     }
-    .private_car_request_form_date > div {
-        width:32vw;
+    .private_car_request_form_date_day{
+        width:100%;
     }
     .private_car_request_form_date_day_input {
-        width:31vw;
+        width:32vw;
        font-size: 15px;
     }
     .private_car_request_form_car{
