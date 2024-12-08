@@ -197,7 +197,7 @@
 }
 .main_section_stat {
     width:60vw;
-    height:45vh;
+    height:40vh;
     margin: 10px 0;
     padding: 20px 0px;
     background-color: #fff;
@@ -216,8 +216,8 @@
     justify-content: center;
 }
 .main_section_stat_header_div > h4 {
-    font-size: 17px;
-    font-weight: 400;
+    font-size: 14px;
+    font-weight: 700;
 }
 .main_section_stat_items{
     width:50vw;
@@ -343,25 +343,13 @@
 .single-item h5:nth-of-type(3){
     flex: 3;
 }
-.student-has-driver,.high-rating {
+.student-at-home{
     color: #56CA00;
-    padding: 5px 0;
-    border-radius: 5px;
-    font-weight: 700!important;
   }
-  .student-without-driver,.in-route,.medium-rating {
+ .in-route{
     color: #FFB400;
-    padding: 5px 0;
-    border-radius: 5px;
-    font-weight: 700!important;
   }
-  
-.absent,.low-rating {
-    color: #FF4C51;
-    padding: 5px 0;
-    border-radius: 5px;
-    font-weight: 700!important;
-  }
+
   .info-details-back-button:hover{
     background-color: #e0e0e0;
   }
@@ -569,6 +557,7 @@
   }
   .private_car_request_header > h4 {
     margin: 0;
+    font-size: 14px;
   }
 .private_car_request_form_div{
     height: 60vh;

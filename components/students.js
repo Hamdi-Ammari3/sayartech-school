@@ -9,6 +9,7 @@ const Students = () => {
   const [nameFilter, setNameFilter] = useState("");
   const [addressFilter, setAddressFilter] = useState("");
   const [birthdateFilter, setBirthdateFilter] = useState("");
+  const [studentState,setStudentState] = useState('')
 
   const { students,drivers,loading } = useGlobalState()
 
@@ -34,10 +35,13 @@ const Students = () => {
     const matchesAddress = student.student_street.includes(addressFilter);
   
     // Check birthdate
-    const matchesBirthdate = formatDate(student.student_birth_date).includes(birthdateFilter);
+    //const matchesBirthdate = formatDate(student.student_birth_date).includes(birthdateFilter);
+
+    // Check student state
+    const matchesState = student.student_trip_status.includes(studentState)
   
     // Combine filters
-    return matchesName && matchesAddress && matchesBirthdate;
+    return matchesName && matchesAddress && matchesState;
   });
 
   // Handle search input change
@@ -52,6 +56,10 @@ const Students = () => {
   const handleBirthdateFilterChange = (event) => {
     setBirthdateFilter(event.target.value);
   };
+
+  const handleStudentStateChange = (event) => {
+    setStudentState(event.target.value)
+  }
 
   // Select the student
   const selectStudent = async (student) => {
@@ -88,10 +96,10 @@ const Students = () => {
       return 'no-rating';
     }
     if (status === 'at home' || status === 'at school') {
-      return 'high-rating';
+      return 'student-at-home';
     }
     if (status === 'going to home' || status === 'going to school') {
-      return 'medium-rating';
+      return 'in-route';
     }
   };
 
@@ -243,11 +251,13 @@ const Students = () => {
               className='students-section-inner-title_search_input' />
             </div>
             <div className='students-section-inner-title'>
-              <input 
-              onChange={handleBirthdateFilterChange} 
-              placeholder='تاريخ الميلاد' 
-              type='text' 
-              className='students-section-inner-title_search_input' />
+              <select onChange={handleStudentStateChange} value={studentState}>
+                <option value=''>حالة الطالب</option>
+                <option value='at home'>في المنزل</option>
+                <option value='going to school'>في الطريق الى المدرسة</option>
+                <option value='at school'>في المدرسة</option>
+                <option value='going to home'>في الطريق الى المنزل</option>
+              </select>
             </div>
           </div>
           <div className='all-items-list'>
@@ -255,7 +265,7 @@ const Students = () => {
               <div key={index} onClick={() => selectStudent(student)} className='single-item' >
                 <h5>{student.student_full_name} {student.student_family_name}</h5>
                 <h5>{student.student_street} - {student.student_city}</h5>
-                <h5>{formatDate(student.student_birth_date) || '-'}</h5>
+                <h5 className={getTripClassName(student.student_trip_status)}>{getTripArabicName(student.student_trip_status || '-')}</h5>
               </div>
             ))}
           </div>
