@@ -8,23 +8,9 @@ const Students = () => {
   const [driverInfo, setDriverInfo] = useState(null)
   const [nameFilter, setNameFilter] = useState("");
   const [addressFilter, setAddressFilter] = useState("");
-  const [birthdateFilter, setBirthdateFilter] = useState("");
   const [studentState,setStudentState] = useState('')
 
   const { students,drivers,loading } = useGlobalState()
-
-  const formatDate = (timestamp) => {
-    if (!timestamp?.seconds) return "-"; // Handle invalid timestamps
-    
-    const date = new Date(timestamp.seconds * 1000); // Convert Firestore timestamp to JS Date
-    
-    // Format date as "day shortMonth year"
-    return new Intl.DateTimeFormat("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    }).format(date);
-  };
 
   // Filtered students based on search term
   const filteredStudents = students.filter((student) => {
@@ -53,10 +39,6 @@ const Students = () => {
     setAddressFilter(event.target.value);
   };
   
-  const handleBirthdateFilterChange = (event) => {
-    setBirthdateFilter(event.target.value);
-  };
-
   const handleStudentStateChange = (event) => {
     setStudentState(event.target.value)
   }
@@ -122,18 +104,11 @@ const Students = () => {
     }
   }
 
-  const findDriver = (driverId) => {
-    const assignedDriver = drivers.find(
-      (driver) => String(driver.driver_user_id) === String(driverId)
-    );
-    return assignedDriver?.driver_full_name   
-  }
-
   // Find and set driver info when a student is selected
   useEffect(() => {
     if (selectedStudent) {
       const assignedDriver = drivers.find(
-        (driver) => String(driver.driver_user_id) === String(selectedStudent.driver_id)
+        (driver) => String(driver.id) === String(selectedStudent.driver_id)
       );
       setDriverInfo(assignedDriver || null)
       

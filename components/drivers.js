@@ -59,7 +59,7 @@ const Drivers = () => {
     const assigned = students
       .filter(
         (student) => 
-          student.driver_id === selectedDriver.driver_user_id
+          student.driver_id === selectedDriver.id
       )
     setAssignedStudents(assigned)
   }
@@ -111,7 +111,6 @@ const Drivers = () => {
       </div>
     )
   }
-
 
   return (
     <div className='white_card-section-container'>

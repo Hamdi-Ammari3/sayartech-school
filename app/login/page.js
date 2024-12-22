@@ -1,7 +1,6 @@
 "use client"
 import React,{useState} from 'react'
 import '../style.css'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { collection, getDocs, query, where } from "firebase/firestore"
 import { DB } from '../../firebaseConfig'

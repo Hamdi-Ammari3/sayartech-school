@@ -5,15 +5,6 @@ import Select from 'react-select';
 import { addDoc, collection,Timestamp } from 'firebase/firestore';
 import { DB } from '../firebaseConfig'
 
-const cars = [
-  {label: 'سيارة صالون ٥ راكب',value: 'سيارة صالون ٥ راكب'},
-  {label:'سيارة خاصة ٧ راكب',value:'سيارة خاصة ٧ راكب'},
-  {label:'ستاركس',value:'ستاركس'},
-  {label:'باص صغير ١٢ راكب',value:'باص صغير ١٢ راكب'},
-  {label:'باص متوسط ١٤ راكب',value:'باص متوسط ١٤ راكب'},
-  {label:'باص كبير ٣٠ راكب',value:'باص كبير ٣٠ راكب'}
-]
-
 const PrivateCarRequest = () => {
 
   const [startDate, setStartDate] = useState(null);
@@ -26,6 +17,15 @@ const PrivateCarRequest = () => {
   const [schoolName,setSchoolName] = useState('')
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const cars = [
+    {label: 'سيارة صالون ٥ راكب',value: 'سيارة صالون ٥ راكب'},
+    {label:'سيارة خاصة ٧ راكب',value:'سيارة خاصة ٧ راكب'},
+    {label:'ستاركس',value:'ستاركس'},
+    {label:'باص صغير ١٢ راكب',value:'باص صغير ١٢ راكب'},
+    {label:'باص متوسط ١٤ راكب',value:'باص متوسط ١٤ راكب'},
+    {label:'باص كبير ٣٠ راكب',value:'باص كبير ٣٠ راكب'}
+  ]
 
   // Get the logged in school name
   useEffect(() => {

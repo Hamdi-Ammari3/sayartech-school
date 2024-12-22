@@ -2,12 +2,10 @@ import React from 'react'
 import { useGlobalState } from '../globalState';
 import { PiStudentLight } from "react-icons/pi";
 import { PiVanLight } from "react-icons/pi"
-import { PiCurrencyDollarLight } from "react-icons/pi"
-import { TfiStatsUp } from "react-icons/tfi"
 import ClipLoader from "react-spinners/ClipLoader"
 
 const Stats = () => {
-    const {students,drivers, loading } = useGlobalState()
+    const {students,drivers,loading } = useGlobalState()
 
     return (
     <div className='main_section_stat'>
