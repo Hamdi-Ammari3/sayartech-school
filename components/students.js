@@ -6,28 +6,19 @@ import ClipLoader from "react-spinners/ClipLoader"
 const Students = () => {
   const [selectedStudent,setSelectedStudent] = useState(null)
   const [driverInfo, setDriverInfo] = useState(null)
-  const [nameFilter, setNameFilter] = useState("");
-  const [addressFilter, setAddressFilter] = useState("");
+  const [nameFilter, setNameFilter] = useState("")
+  const [addressFilter, setAddressFilter] = useState("")
   const [studentState,setStudentState] = useState('')
 
   const { students,drivers,loading } = useGlobalState()
 
   // Filtered students based on search term
   const filteredStudents = students.filter((student) => {
-    // Check name
-    const matchesName = student.student_full_name.includes(nameFilter);
-  
-    // Check address
-    const matchesAddress = student.student_street.includes(addressFilter);
-  
-    // Check birthdate
-    //const matchesBirthdate = formatDate(student.student_birth_date).includes(birthdateFilter);
+    const matchesName = student.student_full_name.includes(nameFilter) // check name
+    const matchesAddress = student.student_street.includes(addressFilter) // check address
+    const matchesState = student.student_trip_status.includes(studentState) // check state
 
-    // Check student state
-    const matchesState = student.student_trip_status.includes(studentState)
-  
-    // Combine filters
-    return matchesName && matchesAddress && matchesState;
+    return matchesName && matchesAddress && matchesState
   });
 
   // Handle search input change
@@ -35,10 +26,12 @@ const Students = () => {
     setNameFilter(event.target.value);
   };
   
+  // handle address filter change
   const handleAddressFilterChange = (event) => {
     setAddressFilter(event.target.value);
   };
   
+  // handle student state change
   const handleStudentStateChange = (event) => {
     setStudentState(event.target.value)
   }
@@ -69,7 +62,7 @@ const Students = () => {
     }
   
     return age === 0 ? "-" : age; // Return "-" if age is 0
-  };
+  }
   
 
   // Color based on student trip status
@@ -115,6 +108,8 @@ const Students = () => {
     }
   }, [selectedStudent, drivers]);
 
+  console.log(drivers)
+
   if(loading) {
     return(
       <div className='white_card-section-container'>
@@ -140,8 +135,10 @@ const Students = () => {
 
             <div className="item-detailed-data-header">
               <div className='item-detailed-data-header-title'>
-                <h5 style={{marginRight:'3px'}}>{selectedStudent.student_family_name}</h5>
-                <h5>{selectedStudent.student_full_name}</h5>
+                <h5>{selectedStudent.student_phone_number || '-'}</h5>
+                <h5 style={{marginLeft:'5px',marginRight:'5px'}}>-</h5>
+                <h5 style={{marginRight:'4px'}}>{selectedStudent.student_family_name}</h5>
+                <h5>{selectedStudent.student_parent_full_name || selectedStudent.student_full_name}</h5>
               </div>
               <button className="info-details-back-button" onClick={goBack}>
                 <BsArrowLeftShort size={24} className="email-back-button-icon"  />
@@ -152,24 +149,19 @@ const Students = () => {
 
               <div className="item-detailed-data-main-box">
                   <div>
-                    <h5 style={{marginLeft:'4px'}}>{selectedStudent.student_parent_full_name || selectedStudent.student_full_name}</h5>
-                    <h5>{selectedStudent.student_family_name}</h5>
-                  </div>
-                  <div>
-                    <h5>{selectedStudent.student_phone_number || '-'}</h5>
-                  </div>
-                  <div>
-                    <h5 style={{marginLeft:'10px'}}>{selectedStudent.student_birth_date ? calculateAge(selectedStudent.student_birth_date) : '-'}</h5>
-                    <h5>سنة</h5>
+                    <h5 style={{marginLeft:'4px'}}>{selectedStudent.student_full_name}</h5>
+                    <h5 style={{marginLeft:'4px'}}>-</h5>
+                    <h5 style={{marginLeft:'4px'}}>{selectedStudent.student_birth_date ? calculateAge(selectedStudent.student_birth_date) : '-'}</h5>
+                    <h5 style={{marginLeft:'10px'}}>سنة</h5>
                   </div>
                   <div className="student-info-content-main-address-info">
-                    <h5>{selectedStudent.student_home_address || '-'}</h5>
-                    <h5>-</h5>
+                    <h5 style={{marginLeft:'4px'}}>{selectedStudent.student_home_address || '-'}</h5>
+                    <h5 style={{marginLeft:'4px'}}>-</h5>
                    <h5>{selectedStudent.student_street || '-'}</h5>
                   </div>
                   <div className="student-info-content-main-address-info">
-                    <h5>{selectedStudent.student_city || '-'}</h5>
-                    <h5>-</h5>
+                    <h5 style={{marginLeft:'4px'}}>{selectedStudent.student_city || '-'}</h5>
+                    <h5 style={{marginLeft:'4px'}}>-</h5>
                     <h5>{selectedStudent.student_state || '-'}</h5>
                   </div>
               </div>
@@ -182,9 +174,8 @@ const Students = () => {
                       </div>
                       <div>
                         <h5 style={{marginLeft:'4px'}}>{driverInfo.driver_full_name || '-'}</h5>
-                        <h5>{driverInfo.driver_family_name || '-'}</h5>
-                      </div>
-                      <div>
+                        <h5 style={{marginLeft:'4px'}}>{driverInfo.driver_family_name || '-'}</h5>
+                        <h5 style={{marginLeft:'4px'}}>-</h5>
                         <h5>{driverInfo.driver_phone_number || '-'}</h5>
                       </div>
                       <div>

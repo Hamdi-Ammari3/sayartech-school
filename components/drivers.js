@@ -6,6 +6,7 @@ import { BsArrowLeftShort } from "react-icons/bs"
 import ClipLoader from "react-spinners/ClipLoader"
 
 const Drivers = () => {
+
   const [nameFilter, setNameFilter] = useState("")
   const [carTypeFilter,setCarTypeFilter] = useState('')
   const [carPlateFilter,setCarPlateFilter] = useState('')
@@ -16,34 +17,29 @@ const Drivers = () => {
 
   const { drivers,students,loading} = useGlobalState()
 
-  // Filtered students based on search term
   const filteredDrivers = drivers.filter((driver) => {
-    // Check name filter
-    const matchesName = driver.driver_full_name.includes(nameFilter);
-  
-    // Check car type filter
-    const matchesCarType = !carTypeFilter || driver.driver_car_type.trim() === carTypeFilter;
-  
-    // Check car plate filter
-    const matchesCarPlate = driver.driver_car_plate.includes(carPlateFilter);
-  
-    // Combine all filters
+    const matchesName = driver.driver_full_name.includes(nameFilter) // check name
+    const matchesCarType = !carTypeFilter || driver.driver_car_type.trim() === carTypeFilter // check car type
+    const matchesCarPlate = driver.driver_car_plate.includes(carPlateFilter) // check car plate
+
     return matchesName && matchesCarType && matchesCarPlate;
-  });
+  })
   
   // Handle search input change
   const handleNameFilterChange = (event) => {
     setNameFilter(event.target.value);
-  };
+  }
+
+  // handle car type filter change
+  const handleCarTypeFilterChange = (event) => {
+    setCarTypeFilter(event.target.value);
+  }
   
+  // handle car plate filter change
   const handleCarPlateChange = (event) => {
     setCarPlateFilter(event.target.value);
   };
   
-  const handleCarTypeFilterChange = (event) => {
-    setCarTypeFilter(event.target.value);
-  };
-
   // Select the driver
   const selectDriver = async (driver) => {
     setSelectedDriver(driver);
@@ -83,11 +79,11 @@ const Drivers = () => {
 
       // Update the `rating` array in Firestore
       await updateDoc(driverRef, {
-        rating: arrayUnion(Number(newRating)), // Add the new rating to the array
+        school_rating: arrayUnion(Number(newRating)), // Add the new rating to the array
       });
 
       alert("تم إضافة التقييم بنجاح!");
-      setNewRating(""); // Reset the rating input
+      setNewRating("");
     } catch (error) {
       console.error("Error adding rating:", error);
       alert("فشل في إضافة التقييم. الرجاء المحاولة مرة أخرى.");

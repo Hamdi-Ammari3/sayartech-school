@@ -55,10 +55,10 @@ export const GlobalStateProvider = ({ children }) => {
     const unsubscribeDrivers = onSnapshot(collection(DB, "drivers"), async (snapshot) => {
       try {
         const drivers = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    
-        // Filter drivers directly based on the `school_name` in `assigned_students`
+        
+        // Filter drivers based on `lineSchool` in their `lines` array
         const matchingDrivers = drivers.filter(driver =>
-          driver.assigned_students?.some(student => student.school_name === storedDashboardName)
+          driver.line?.some(li => li.lineSchool === storedDashboardName)
         );
     
         // Dispatch filtered drivers
@@ -66,7 +66,7 @@ export const GlobalStateProvider = ({ children }) => {
           type: "FETCH_SUCCESS",
           payload: { drivers: matchingDrivers },
         });
-
+    
       } catch (error) {
         console.error("Error filtering drivers:", error);
         dispatch({
@@ -75,6 +75,7 @@ export const GlobalStateProvider = ({ children }) => {
         });
       }
     });
+    
     
     // Cleanup listeners on unmount
     return () => {

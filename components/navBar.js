@@ -25,8 +25,8 @@ const Navbar = () => {
     } finally {
       setIsLoggingOUt(false)
     }
-    
   }
+  
   return (
     <div className='navbar'>
         <div className='navbar_logo_div'>
