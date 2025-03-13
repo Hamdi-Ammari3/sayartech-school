@@ -1,5 +1,6 @@
 'use client'
 import React,{useState,useEffect} from 'react'
+import { LoadScript } from "@react-google-maps/api"
 import {useRouter} from 'next/navigation'
 import ClipLoader from "react-spinners/ClipLoader"
 import './style.css'
@@ -7,6 +8,7 @@ import Navbar from '../components/navBar'
 import Main from '../components/main'
 import Students from '../components/students'
 import Drivers from '../components/drivers'
+import TrackingMap from '../components/trackingMap'
 import Email from '../components/email'
 import PrivateCarRequest from '../components/privateCarRequest'
 
@@ -15,16 +17,15 @@ const Dashboard = () => {
   const [activeSection,setActiveSection] = useState('الرئيسية')
   const router = useRouter();
 
-
-useEffect(() => {
-  // Check if admin is logged in
-  const adminLoggedIn = localStorage.getItem('adminLoggedIn');
-  if (!adminLoggedIn) {
-    router.push('/login'); // Redirect to login page if not authenticated
-  } else {
-    setIsAuthenticated(true); // Allow access to the dashboard
-  }
-}, []);
+  useEffect(() => {
+    // Check if admin is logged in
+    const adminLoggedIn = localStorage.getItem('adminLoggedIn');
+    if (!adminLoggedIn) {
+      router.push('/login'); // Redirect to login page if not authenticated
+    } else {
+      setIsAuthenticated(true); // Allow access to the dashboard
+    }
+  }, []);
 
 
   if (!isAuthenticated) {
@@ -46,11 +47,13 @@ useEffect(() => {
     setActiveSection(section)
   }
 
-// Function to render section component
+  // Function to render section component
   const renderContent = () => {
     switch (activeSection) {
       case 'الرئيسية':
         return <Main/>
+      case 'متابعة السائقين':
+        return <TrackingMap/>
       case 'الطلاب' :
         return <Students/>
       case 'السواق':
@@ -65,6 +68,7 @@ useEffect(() => {
   }
 
   return (
+    <LoadScript googleMapsApiKey="AIzaSyA-3LcUn0UzzVovibA1YZIL29n1c0GIi9M">
     <div className='dashboard-container'>
       <Navbar/>
       <div className='main-box'>
@@ -76,6 +80,13 @@ useEffect(() => {
               className={activeSection === 'الرئيسية' ? 'active':''}
             >
               <h4 >الرئيسية</h4>
+            </div>
+
+            <div
+              onClick={() => handleSectionSelect('متابعة السائقين')}
+              className={activeSection === 'متابعة السائقين' ? 'active':''}
+            >
+              <h4 >متابعة السائقين</h4>
             </div>
 
             <div
@@ -113,6 +124,7 @@ useEffect(() => {
         </div>
       </div>
     </div>
+    </LoadScript>
   )
 }
 

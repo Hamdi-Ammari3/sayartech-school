@@ -42,9 +42,10 @@ export const GlobalStateProvider = ({ children }) => {
     }
 
     const unsubscribeStudents = onSnapshot(
-      query(collection(DB, "students"), where("student_school", "==", storedDashboardName)),
+      query(collection(DB, "riders"), where("destination", "==", storedDashboardName)),
       (snapshot) => {
-        const students = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        const riders = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        const students = riders.filter((rider) => rider.rider_type === 'student');
         dispatch({
           type: "FETCH_SUCCESS",
           payload: { students },
@@ -58,7 +59,7 @@ export const GlobalStateProvider = ({ children }) => {
         
         // Filter drivers based on `lineSchool` in their `lines` array
         const matchingDrivers = drivers.filter(driver =>
-          driver.line?.some(li => li.lineSchool === storedDashboardName)
+          driver.line?.some(line => line.line_destination === storedDashboardName)
         );
     
         // Dispatch filtered drivers

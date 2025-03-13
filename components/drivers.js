@@ -1,4 +1,5 @@
 import React,{useState,useEffect} from 'react'
+import Image from 'next/image'
 import { updateDoc,doc,arrayUnion } from 'firebase/firestore'
 import { DB } from '../firebaseConfig'
 import { useGlobalState } from '../globalState'
@@ -15,7 +16,7 @@ const Drivers = () => {
   const [newRating, setNewRating] = useState("")
   const [ratingLoading,setRatingLoading] = useState(false)
 
-  const { drivers,students,loading} = useGlobalState()
+  const { drivers,students} = useGlobalState()
 
   const filteredDrivers = drivers.filter((driver) => {
     const matchesName = driver.driver_full_name.includes(nameFilter) // check name
@@ -85,28 +86,12 @@ const Drivers = () => {
       alert("تم إضافة التقييم بنجاح!");
       setNewRating("");
     } catch (error) {
-      console.error("Error adding rating:", error);
+      console.log("Error adding rating:", error);
       alert("فشل في إضافة التقييم. الرجاء المحاولة مرة أخرى.");
     } finally {
       setRatingLoading(false)
     }
   };
-
-  if(loading) {
-    return(
-      <div className='white_card-section-container'>
-        <div style={{height:'100%',width:'100%',display:'flex',alignItems:'center',justifyContent:'center'}}>
-          <ClipLoader
-            color={'#955BFE'}
-            loading={loading}
-            size={50}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className='white_card-section-container'>
@@ -116,6 +101,7 @@ const Drivers = () => {
 
             <div className='item-detailed-data-header'>
               <div className='item-detailed-data-header-title'>
+              <h5 style={{marginRight:'10px'}}>{selectedDriver.driver_phone_number || '-'}</h5>  
                 <h5 style={{marginRight:'3px'}}>{selectedDriver.driver_family_name}</h5>
                 <h5>{selectedDriver.driver_full_name}</h5>
               </div>
@@ -126,12 +112,26 @@ const Drivers = () => {
             
             <div className="item-detailed-data-main">
 
-              <div className="item-detailed-data-main-box">
+              <div className="item-detailed-data-main-firstBox">
+                <div className='firstBox-image-box'>
+                  <Image 
+                    src={selectedDriver.driver_personal_image ? selectedDriver.driver_personal_image : imageNotFound}
+                    style={{ objectFit: 'cover' }}  
+                    width={200}
+                    height={200}
+                    alt='personal'
+                  />
+                  <Image 
+                    src={selectedDriver.driver_car_image ? selectedDriver.driver_car_image : imageNotFound} 
+                    style={{ objectFit: 'cover' }}  
+                    width={200}
+                    height={200}
+                    alt='car image'
+                  />
+                </div>
+                <div className='firstBox-text-box'>
                   <div>
                     <h5>{selectedDriver.driver_car_type || '-'}</h5>
-                  </div>
-                  <div>
-                    <h5>{selectedDriver.driver_phone_number || '-'}</h5>
                   </div>
                   <div>
                     <h5 style={{marginLeft:'10px'}}>موديل السيارة</h5>
@@ -166,26 +166,27 @@ const Drivers = () => {
                     ) : (
                       <button onClick={() => addDriverRating(selectedDriver.id)}>اضف</button>
                     )}
-                    
                   </div>
+                </div>                 
               </div>
 
-              <>
-                {assignedStudents.length > 0 ? (
-                  <div className='item-detailed-data-main-second-box'>
-                    {assignedStudents.map((assign,index) => (
-                    <div key={index} className="students-assigned-to-the-driver">
-                      <h5 style={{marginLeft:'4px'}}>{assign.student_full_name}</h5>
-                      <h5>{assign.student_family_name}</h5>
-                    </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div style={{marginBottom:'50px'}} className='item-detailed-data-main-box'>
-                    <h5>لا يوجد طلاب</h5>
-                  </div>
-                )}
-              </>
+              <div className="item-detailed-data-main-second-box">
+                <div className="student-dropdown-open">
+                  {assignedStudents.length > 0 ? (
+                    <>
+                      {assignedStudents.map((assign,index) => (
+                        <div key={index} className='student-dropdown-item'>
+                          <h5 style={{marginLeft:'3px'}}>{assign.full_name}</h5>
+                          <h5>{assign.family_name}</h5>
+                        </div>
+                      ))}
+                    </>
+                  ) : (
+                    <h5 className="no-students">لا يوجد طلاب</h5>
+                  )}
+                </div>
+              </div>
+
             </div>
           </div>
         </>
