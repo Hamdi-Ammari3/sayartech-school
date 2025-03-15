@@ -95,62 +95,11 @@ const TrackingMap = () => {
         setSelectedRider(null)
     }
 
-    // Select line
     // Handle line selection
     const handleLineSelect = (line) => {
         setSelectedLine(line)
         setSelectedRider(null)
     }
-
-    // Function to determine trip status
-    const getTripStatus = () => {
-        if (!selectedLine) return "";
-
-        const { first_trip_started, first_trip_finished, second_trip_started, second_trip_finished, riders } = selectedLine;
-
-        const totalRiders = riders.length;
-        const pickedUpCount = riders.filter(rider => rider.picked_up).length;
-        const checkedInCount = riders.filter(rider => rider.checked_in_front_of_school).length;
-        const droppedOffCount = riders.filter(rider => rider.dropped_off).length;
-
-        if (first_trip_started === true && 
-            first_trip_finished === false &&
-            second_trip_started === false &&
-            second_trip_finished === false
-
-        ) return `رحلة الذهاب بدأت - ${totalRiders}/${pickedUpCount}`;
-
-        if (first_trip_started === true && 
-            first_trip_finished === false &&
-            second_trip_started === false &&
-            second_trip_finished === false &&
-            pickedUpCount === totalRiders
-        
-        ) return "في اتجاه المدرسة";
-
-        if (first_trip_started === true && 
-            first_trip_finished === true &&
-            second_trip_started === false &&
-            second_trip_finished === false
-        
-        ) return "رحلة الذهاب انتهت";
-
-        if (first_trip_started === true && 
-            first_trip_finished === true &&
-            second_trip_started === true &&
-            second_trip_finished === false
-        
-        ) return `رحلة العودة بدأت - ${checkedInCount}/${droppedOffCount}`;
-        
-        if (first_trip_started === true && 
-            first_trip_finished === true &&
-            second_trip_started === true &&
-            second_trip_finished === true
-        
-        ) return "رحلة العودة انتهت";
-
-        return "الرحلة لم تبدأ بعد";
-    };
 
     // Select rider
     const handleRiderSelect = (event) => {
@@ -161,6 +110,27 @@ const TrackingMap = () => {
             const rider = selectedLine?.riders.find(r => r.id === riderId);
             setSelectedRider(rider || null);
         }
+    };
+
+    // Mapping English status to Arabic
+    const riderStatusArabic = {
+        "home": "في المنزل",
+        "school": "في المدرسة",
+        "to school": "في الطريق إلى المدرسة",
+        "to home": "في الطريق إلى المنزل"
+    };
+
+    const getRiderStatus = () => {
+        if (!selectedLine) return "";
+        const { first_trip_started, first_trip_finished, second_trip_started, second_trip_finished } = selectedLine;
+    
+        if (first_trip_started === false && selectedRider.picked_up === false) return "home";
+        if (first_trip_started === true && selectedRider.picked_up === false) return "home";
+        if (first_trip_started === true && selectedRider.picked_up === true) return "to school";
+        if (first_trip_finished && selectedRider.picked_up === true) return "school";
+        if (second_trip_started === true && selectedRider.picked_from_school === true) return "to home";
+        if(second_trip_finished && selectedRider.picked_from_school === true) return "home";
+        return "in-route";
     };
 
     // Handle map load
@@ -211,12 +181,48 @@ const TrackingMap = () => {
                   stroke="rgba(42, 109, 176, 1)" stroke-width="2"/>
         </svg>`;
 
+    const homeIcon = `data:image/svg+xml;charset=UTF-8, 
+        <svg width="60" height="60" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 6L4 28h8v24h16V40h8v12h16V28h8L32 6z" 
+                fill="rgba(255, 209, 92, 0.9)" 
+                stroke="rgba(65, 90, 107, 1)" 
+                stroke-width="3"
+                stroke-linecap="round" 
+                stroke-linejoin="round"/>
+                
+            <rect x="24" y="34" width="8" height="8" 
+                rx="2" ry="2" 
+                fill="rgba(138, 215, 248, 1)"/>
+                
+            <rect x="38" y="34" width="8" height="8" 
+                rx="2" ry="2" 
+                fill="rgba(138, 215, 248, 1)"/>
+                
+            <rect x="31" y="42" width="6" height="10" 
+                rx="2" ry="2" 
+                fill="rgba(65, 90, 107, 1)"/>
+        </svg>`;
+    
+    const schoolIcon = `data:image/svg+xml;charset=UTF-8, 
+        <svg width="60" height="60" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 28h48v24H8z" 
+                  fill="rgba(255, 193, 7, 0.9)" 
+                  stroke="rgba(196, 160, 6, 1)" stroke-width="2"/>
+            <path d="M16 28V16l16-10 16 10v12" 
+                  fill="rgba(240, 240, 240, 1)" 
+                  stroke="rgba(42, 109, 176, 1)" stroke-width="2"/>
+            <rect x="22" y="34" width="8" height="8" 
+                  fill="rgba(57, 137, 252, 0.9)"/>
+            <rect x="34" y="34" width="8" height="8" 
+                  fill="rgba(57, 137, 252, 0.9)"/>
+            <rect x="28" y="42" width="8" height="10" 
+                  fill="rgba(255, 102, 102, 1)"/>
+        </svg>`;
+
     return (
         <div className='white_card-section-container'>
             <div className='tracking_driver_box'>
-
                 <div className='tracking_driver_sidebar'>
-
                     <div className='tracking_driver_header_select'>
                         <select onChange={setDriverNameChange} value={driverName}>
                             <option value=''>السائق</option>
@@ -227,7 +233,6 @@ const TrackingMap = () => {
                                 ))}
                         </select>
                     </div>
-
                     <div className='tracking_driver_header_lines_info'>
                        {selectedDriver && (
                         <div>
@@ -249,19 +254,11 @@ const TrackingMap = () => {
                         </div>
                        )}
                     </div>
-
                 </div>
-
                 <div className='tracking_driver_main'>
-
                     <div className='tracking_driver_main_header'>
                        {selectedDriver && selectedLine && (
                         <div className='tracking_driver_main_header_status_container'>
-
-                            <div className='tracking_driver_main_header_status'>
-                                <p style={{fontSize:'15px'}}>{getTripStatus()}</p>                           
-                            </div>
-
                             <div className="tracking_driver_main_header_select">
                                 <select onChange={handleRiderSelect}>
                                     <option value="">الركاب: {selectedLine?.riders?.length || 0}</option>
@@ -272,11 +269,16 @@ const TrackingMap = () => {
                                     ))}
                                 </select>
                             </div>
-
+                            {selectedRider && (
+                                <div className='tracking_driver_main_header_status'>
+                                    <p style={{fontSize:'15px'}}>
+                                        {riderStatusArabic[getRiderStatus()]}
+                                    </p>  
+                                </div>
+                            )} 
                         </div>
                        )}
                     </div>
-
                     <div className='tracking_driver_main_box'>
                         {!selectedDriver ? (
                             <div className='tracking_driver_main_no_lines'>
@@ -298,66 +300,63 @@ const TrackingMap = () => {
                                     {driverLocation && (
                                         <Marker
                                             position={driverLocation}
-                                            //icon={{
-                                                //url: markerIcon,
-                                                //scaledSize: new window.google.maps.Size(20, 20)
-                                            //}}
                                             icon={{
                                                 url: driverIcon,
-                                                scaledSize: new window.google.maps.Size(60, 60)
+                                                scaledSize: new window.google.maps.Size(55, 55)
                                             }}
                                         />
                                     )}
-
                                     {/* Student Markers */}
                                     {selectedRider ? (                                    
-                                        (() => {
-                                            const isFirstTrip = selectedLine.first_trip_started && !selectedLine.first_trip_finished;
-                                            const isSecondTrip = selectedLine.second_trip_started && !selectedLine.second_trip_finished;
-                
-                                            let markerColor = "red"; // Default (not picked up / not dropped off)
-                                            if (isFirstTrip && selectedRider.picked_up) markerColor = "blue"; // Picked up (first trip)
-                                            if (isSecondTrip && selectedRider.dropped_off) markerColor = "blue"; // Dropped off (second trip)
-                
+                                        (() => {                                            
+                                            const status = getRiderStatus();                                                                                
+                                            if(status === 'home' || status === 'to home') {
+                                                return (
+                                                    <Marker
+                                                        key={selectedRider.id}
+                                                        position={{
+                                                            lat: selectedRider.home_location.latitude,
+                                                            lng: selectedRider.home_location.longitude
+                                                        }}
+                                                        icon={{
+                                                            url: homeIcon,
+                                                            scaledSize: new window.google.maps.Size(35, 35)
+                                                        }}
+                                                    />
+                                                )
+                                            } else if(status === 'school' || status === 'to school') {
+                                                return (
+                                                    <Marker
+                                                        key={selectedRider.id}
+                                                        position={{
+                                                            lat: selectedRider.home_location.latitude,
+                                                            lng: selectedRider.home_location.longitude
+                                                        }}
+                                                        icon={{
+                                                            url: schoolIcon,
+                                                            scaledSize: new window.google.maps.Size(35, 35)
+                                                        }}
+                                                    />
+                                                )
+                                            }
+                                        })()
+                                    ) : (
+                                        selectedLine?.riders?.map((rider, index) => {
                                             return (
                                                 <Marker
-                                                    key={selectedRider.id}
+                                                    key={index}
                                                     position={{
-                                                        lat: selectedRider.home_location.latitude,
-                                                        lng: selectedRider.home_location.longitude
+                                                        lat: rider.home_location.latitude,
+                                                        lng: rider.home_location.longitude
                                                     }}
                                                     icon={{
-                                                        url: `http://maps.google.com/mapfiles/ms/icons/${markerColor}-dot.png`,
+                                                        url: homeIcon,
                                                         scaledSize: new window.google.maps.Size(35, 35)
                                                     }}
                                                 />
                                             );
-                                        })()
-                                    ) : (
-                                            selectedLine?.riders?.map((rider, index) => {
-                                                const isFirstTrip = selectedLine.first_trip_started && !selectedLine.first_trip_finished;
-                                                const isSecondTrip = selectedLine.second_trip_started && !selectedLine.second_trip_finished;
-
-                                                let markerColor = "red"; // Default (not picked up / not dropped off)
-                                                if (isFirstTrip && rider.picked_up) markerColor = "blue"; // Picked up (first trip)
-                                                if (isSecondTrip && rider.dropped_off) markerColor = "blue"; // Dropped off (second trip)
-
-                                                return (
-                                                    <Marker
-                                                        key={index}
-                                                        position={{
-                                                            lat: rider.home_location.latitude,
-                                                            lng: rider.home_location.longitude
-                                                        }}
-                                                        icon={{
-                                                            url: `http://maps.google.com/mapfiles/ms/icons/${markerColor}-dot.png`,
-                                                            scaledSize: new window.google.maps.Size(35, 35)
-                                                        }}
-                                                    />
-                                                );
-                                            })
-                                        )
-                                    }
+                                        })
+                                    )}
                                 </GoogleMap>
                             </div>
                         )}

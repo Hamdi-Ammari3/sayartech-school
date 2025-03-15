@@ -52,7 +52,7 @@ const Dashboard = () => {
     switch (activeSection) {
       case 'الرئيسية':
         return <Main/>
-      case 'متابعة السائقين':
+      case 'متابعة الطلاب':
         return <TrackingMap/>
       case 'الطلاب' :
         return <Students/>
@@ -83,10 +83,10 @@ const Dashboard = () => {
             </div>
 
             <div
-              onClick={() => handleSectionSelect('متابعة السائقين')}
-              className={activeSection === 'متابعة السائقين' ? 'active':''}
+              onClick={() => handleSectionSelect('متابعة الطلاب')}
+              className={activeSection === 'متابعة الطلاب' ? 'active':''}
             >
-              <h4 >متابعة السائقين</h4>
+              <h4 >متابعة الطلاب</h4>
             </div>
 
             <div
