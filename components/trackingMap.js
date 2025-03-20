@@ -121,16 +121,47 @@ const TrackingMap = () => {
     };
 
     const getRiderStatus = () => {
-        if (!selectedLine) return "";
+        if (!selectedRider || !selectedLine) return "";
+
         const { first_trip_started, first_trip_finished, second_trip_started, second_trip_finished } = selectedLine;
-    
-        if (first_trip_started === false && selectedRider.picked_up === false) return "home";
-        if (first_trip_started === true && selectedRider.picked_up === false) return "home";
-        if (first_trip_started === true && selectedRider.picked_up === true) return "to school";
-        if (first_trip_finished && selectedRider.picked_up === true) return "school";
-        if (second_trip_started === true && selectedRider.picked_from_school === true) return "to home";
-        if(second_trip_finished && selectedRider.picked_from_school === true) return "home";
-        return "in-route";
+
+        if(selectedRider.picked_up === false) return "home"
+        
+        if (first_trip_started === true && 
+            first_trip_finished === false &&
+            second_trip_started === false &&
+            second_trip_finished === false &&
+            selectedRider.picked_up === true
+
+        ) return "to school"
+
+        if (first_trip_started === true && 
+            first_trip_finished === true &&
+            second_trip_started === false &&
+            second_trip_finished === false &&
+            selectedRider.picked_up === true
+
+        ) return "school"
+
+        if (first_trip_started === true && 
+            first_trip_finished === true &&
+            second_trip_started === true &&
+            second_trip_finished === false &&
+            selectedRider.picked_up === true &&
+            selectedRider.checked_in_front_of_school === true
+
+        ) return "to home"
+
+        if (first_trip_started === true && 
+            first_trip_finished === true &&
+            second_trip_started === true &&
+            second_trip_finished === false &&
+            selectedRider.picked_up === true &&
+            selectedRider.dropped_off === true
+
+        ) return "home"
+        
+        return "home";
     };
 
     // Handle map load
@@ -146,18 +177,26 @@ const TrackingMap = () => {
     
         // Always include the driver location
         bounds.extend(new window.google.maps.LatLng(driverLocation.lat, driverLocation.lng));
-    
+
+        const riderStatus = getRiderStatus(); // Determine rider status
+
         if (selectedRider) {
-            // Add only the selected rider
-            bounds.extend(new window.google.maps.LatLng(selectedRider.home_location.latitude, selectedRider.home_location.longitude));
+            if(riderStatus === 'home' || riderStatus === 'to home') {
+                bounds.extend(new window.google.maps.LatLng(
+                    selectedRider.home_location.latitude, selectedRider.home_location.longitude
+                ));
+            } else if (riderStatus === 'school' || riderStatus === 'to school') {
+                bounds.extend(new window.google.maps.LatLng(
+                    selectedRider.destination_location.latitude, selectedRider.destination_location.longitude
+                ));
+            }
         } else {
-            // Add all riders if no rider is selected
             selectedLine?.riders?.forEach((rider) => {
                 bounds.extend(new window.google.maps.LatLng(rider.home_location.latitude, rider.home_location.longitude));
             });
         }
     
-        mapRef.current.fitBounds(bounds); // Adjust map view to include all points
+        mapRef.current.fitBounds(bounds);
     }, [selectedRider, driverLocation, selectedLine]);
 
     const driverIcon = `data:image/svg+xml;charset=UTF-8, 
@@ -329,8 +368,8 @@ const TrackingMap = () => {
                                                     <Marker
                                                         key={selectedRider.id}
                                                         position={{
-                                                            lat: selectedRider.home_location.latitude,
-                                                            lng: selectedRider.home_location.longitude
+                                                            lat: selectedRider.destination_location.latitude,
+                                                            lng: selectedRider.destination_location.longitude
                                                         }}
                                                         icon={{
                                                             url: schoolIcon,
