@@ -1,3 +1,8 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 #app-container{
     margin: 0;
     padding: 0;
@@ -363,7 +368,10 @@
     color: #56CA00;
   }
  .in-route{
-    color: #FFB400;
+  color: #FFB400;
+  padding: 5px 0;
+  border-radius: 5px;
+  font-weight: 700!important;
   }
 
   .info-details-back-button:hover{
@@ -642,7 +650,7 @@
     justify-content: center;
   }
   .tracking_driver_line_data{
-    width: 220px;
+    width: 170px;
     height: 30px;
     text-align: center;
     box-shadow: -10px 10px 3px -14px rgba(0,0,0,0.5);
@@ -721,6 +729,25 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
+  }
+  .driver-history-container-std-status{
+    color: #3674B5;
+    padding: 5px 0;
+    border-radius: 5px;
+    font-weight: 700!important;
+  }
+  .gm-style-iw-chr > button{
+    height: 30px !important;
+    width: 30px !important;
+  }
+  .gm-style-iw-chr > button > span {
+    width: 17px !important;
+    height: 17px !important;
+    margin: 0px !important;
+  }
+  .gm-style .gm-style-iw{
+    font-size: 14px;
+    font-weight: bold;
   }
   .tracking_driver_main_map{
     width: 50vw;
