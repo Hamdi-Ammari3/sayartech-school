@@ -4,48 +4,48 @@
   box-sizing: border-box;
 }
 #app-container{
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 .login-container{
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    overflow: hidden;
-    background-color: #F4F5FA;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #F4F5FA;
 }
 .login-container-box{
-    width:27vw;
-    height:70vh;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: -10px 13px 5px -14px rgba(0,0,0,0.5);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  width:27vw;
+  height:70vh;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: -10px 13px 5px -14px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .form-title-box{
-    width:30vw;
-    height: 12vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width:30vw;
+  height: 12vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .form-title-box > h2{
-    text-transform: uppercase;
+  text-transform: uppercase;
 }
 .form-box{
-    width:30vw;
-    height: 50vh;
-    justify-content: space-between;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width:30vw;
+  height: 50vh;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .form-box > form {
     height: 40vh;
